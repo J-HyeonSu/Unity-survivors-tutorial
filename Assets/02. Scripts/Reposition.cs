@@ -1,11 +1,14 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Reposition : MonoBehaviour
 {
-    private void Start()
+    private Collider2D coll;
+
+    private void Awake()
     {
-        Debug.Log("Reposition");
+        coll = GetComponent<Collider2D>();
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -18,7 +21,7 @@ public class Reposition : MonoBehaviour
             float diffX = Mathf.Abs(playerPos.x - myPos.x);
             float diffY = Mathf.Abs(playerPos.y - myPos.y);
 
-            var playDir = GameManager.instance.player.inputVec;
+            Vector3 playDir = GameManager.instance.player.inputVec;
             switch (transform.tag)
             {
                 case "Ground":
@@ -33,6 +36,10 @@ public class Reposition : MonoBehaviour
                     
                     break;
                 case "Enemy":
+                    if (coll.enabled)
+                    {
+                        transform.Translate(playDir * 20 + new Vector3(Random.Range(-3f, 3f),Random.Range(-3f, 3f), 0f));
+                    }
                     break;
             }
         }
