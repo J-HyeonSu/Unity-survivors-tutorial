@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 
 public class Enemy : MonoBehaviour
 {
@@ -59,4 +60,28 @@ public class Enemy : MonoBehaviour
         maxHealth = data.health;
         health = data.health;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Bullet")) return;
+
+        health -= other.GetComponent<Bullet>().damage;
+
+        if (health > 0)
+        {
+            
+        }
+        else
+        {
+            Dead();
+        }
+
+
+    }
+
+    void Dead()
+    {
+        gameObject.SetActive(false);
+    }
+    
 }
