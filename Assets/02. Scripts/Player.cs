@@ -7,16 +7,19 @@ public class Player : MonoBehaviour
     public Vector2 inputVec;
     public float speed = 5f;
 
+    
     public Scanner scanner;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Animator anim;
+    public Hand[] hands;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
+        hands = GetComponentsInChildren<Hand>(true);
     }
 
     void Update()
