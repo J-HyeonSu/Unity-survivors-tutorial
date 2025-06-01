@@ -24,17 +24,20 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.instance.isLive) return;
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }
 
     private void FixedUpdate()
     {
+        if (!GameManager.instance.isLive) return;
         rb.MovePosition(rb.position + inputVec.normalized * (speed * Time.fixedDeltaTime));
     }
 
     private void LateUpdate()
     {
+        if (!GameManager.instance.isLive) return;
         anim.SetFloat("Speed", inputVec.magnitude);
         if (inputVec.x != 0)
         {
@@ -45,5 +48,22 @@ public class Player : MonoBehaviour
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!GameManager.instance.isLive) return;
+
+        GameManager.instance.health -= Time.deltaTime * 10;
+
+        if (GameManager.instance.health < 0)
+        {
+            for (int idx = 2; idx < transform.childCount; idx++)
+            {
+                transform.GetChild(idx).gameObject.SetActive(false);
+            }
+            anim.SetTrigger("Dead");
+            GameManager.instance.GameOver();
+        }
     }
 }
